@@ -1,0 +1,8 @@
+fastapi[standard]
+uvicorn
+requests
+requests_cache
+
+logging
+
+iso4217
