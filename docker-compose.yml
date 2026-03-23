@@ -1,0 +1,44 @@
+services:
+  restapi-currency:
+    container_name: restapi-currency
+
+    restart: unless-stopped
+
+    build:
+      context: .
+      args:
+        - PORT=${PORT-8000}
+
+    env_file:
+      - .env
+
+    ports:
+      - "${PORT-8000}:${PORT-8000}"
+
+    networks:
+      - restapi-currency-network
+
+    user: "1000:1000"
+
+    read_only: true
+    tmpfs:
+      - /app/requester/cache
+      - /tmp
+    volumes:
+      - logs:/app/server/logs
+
+    security_opt:
+      - no-new-privileges:true
+
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+
+
+networks:
+  restapi-currency-network:
+    driver: bridge
+
+volumes:
+  logs:
