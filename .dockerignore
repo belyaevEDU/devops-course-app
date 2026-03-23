@@ -1,0 +1,13 @@
+*.md
+*.yml
+*.json
+
+.git/
+.vscode/
+__pycache__/
+cache
+logs
+
+.DS_Store
+.dockerignore
+.gitignore
