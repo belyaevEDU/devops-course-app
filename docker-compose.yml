@@ -1,6 +1,6 @@
 services:
   restapi-currency:
-    container_name: restapi-currency
+    image: belyaevedu/restapi-currency:${IMAGE_TAG:-latest}
 
     restart: unless-stopped
 
