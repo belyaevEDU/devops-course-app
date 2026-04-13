@@ -4,3 +4,8 @@ todo
 cache
 logs
 .env
+
+.semgrep-rules
+*.sarif
+
+.DS_STORE

@@ -22,8 +22,8 @@ services:
 
     read_only: true
     tmpfs:
-      - /app/requester/cache
-      - /tmp
+      - /app/requester/cache:uid=1000,gid=1000
+      - /tmp:uid=1000,gid=1000
     volumes:
       - logs:/app/server/logs
 
