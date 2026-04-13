@@ -36,10 +36,10 @@ def serve_currency_data(currency: str = "", date: str = ""):
 
     status = True # going through checkpoints. geniunely couldn't figure out a better way while keeping all features intact
 
-    if currency != "" and query_validation.validate_currency_name(currency) == False:
+    if currency != "" and not query_validation.validate_currency_name(currency):
         status = False
         errorMessage = INVALID_CURRENCY_MESSAGE
-    if date != "" and query_validation.validate_date(date) == False:
+    if date != "" and not query_validation.validate_date(date):
         status = False
         if errorMessage != "":
             errorMessage += " & " + INVALID_DATE_MESSAGE.lower() # adding to the existing error message if there's already one

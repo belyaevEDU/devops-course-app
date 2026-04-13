@@ -1,4 +1,4 @@
-import xml.etree.ElementTree as ET
+import defusedxml.ElementTree as ET
 from . import utils
 
 def get_select_currency_rate(response: str, userCurrency: str) -> dict[str, float]:

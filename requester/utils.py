@@ -1,14 +1,14 @@
-import xml.etree.ElementTree as ET
+import defusedxml.ElementTree as ET
 from datetime import date, datetime
 
 PARAMETER_ERROR_MESSAGE = "Error in parameters"
 
-def check_for_error_in_response(root: ET.Element):
+def check_for_error_in_response(root: ET):
     """
     If the date is long in the past, the central bank's API returns a single ValCurs element with the text 'Error in parameters'.
     This function checks for that response.
     """
-    if root != None:
+    if root is not None:
         if root.text == PARAMETER_ERROR_MESSAGE:
             raise ValueError(PARAMETER_ERROR_MESSAGE)
 

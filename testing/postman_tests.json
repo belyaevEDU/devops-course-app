@@ -1,0 +1,223 @@
+{
+  "info": {
+    "_postman_id": "095c1f60-7b05-4ef5-bcd6-1dbee0231cc3",
+    "name": "fastapi_yadrolab_tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53086360"
+  },
+  "item": [
+    {
+      "name": "/info",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const responseJson = pm.response.json();",
+              "",
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200)",
+              "});",
+              "",
+              "pm.test(\"Service named to be currency\", () => {",
+              "    pm.expect(responseJson.service).to.eql(\"currency\");",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "127.0.0.1:{{PORT}}/info",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "{{PORT}}",
+          "path": [
+            "info"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "/info/currency 2026-03-11",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const responseJson = pm.response.json();",
+              "",
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200)",
+              "});",
+              "",
+              "pm.test(\"Service named to be currency\", () => {",
+              "    pm.expect(responseJson.service).to.eql(\"currency\");",
+              "});",
+              "",
+              "const expectedData = {\"AUD\":55.6138,\"AZN\":46.3174,\"DZD\":59.9967,\"GBP\":105.4559,\"AMD\":20.8631,\"BHD\":209.3686,\"BYN\":26.9361,\"BOB\":11.395,\"BRL\":15.1027,\"HUF\":23.8388,\"VND\":31.4179,\"HKD\":10.0819,\"GEL\":28.6639,\"DKK\":12.1786,\"AED\":21.4403,\"USD\":78.7396,\"EUR\":91.8979,\"EGP\":15.1443,\"INR\":85.5703,\"IDR\":46.3884,\"IRR\":58.8139,\"KZT\":15.944,\"CAD\":58.0077,\"QAR\":21.6318,\"KGS\":90.0396,\"CNY\":11.4413,\"CUP\":32.8082,\"MDL\":45.3227,\"MNT\":22.0807,\"NGN\":56.0175,\"NZD\":46.665,\"NOK\":81.5667,\"OMR\":204.7844,\"PLN\":21.5589,\"SAR\":20.9972,\"RON\":17.9791,\"XDR\":107.2229,\"SGD\":61.7033,\"TJS\":82.0119,\"THB\":24.8225,\"BDT\":64.206,\"TRY\":17.879,\"TMT\":22.497,\"UZS\":64.7629,\"UAH\":17.9377,\"CZK\":37.3333,\"SEK\":85.0751,\"CHF\":101.5471,\"ETB\":50.3414,\"RSD\":77.9759,\"ZAR\":48.4167,\"KRW\":52.7357,\"JPY\":49.9332,\"MMK\":37.495};",
+              "pm.test(\"Data returns as expected\", () => {",
+              "    pm.expect(responseJson.data).to.eql(expectedData)",
+              "})",
+              "",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {}
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "text"
+            }
+          }
+        },
+        "url": {
+          "raw": "127.0.0.1:{{PORT}}/info/currency?date=2026-03-11",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "{{PORT}}",
+          "path": [
+            "info",
+            "currency"
+          ],
+          "query": [
+            {
+              "key": "date",
+              "value": "2026-03-11"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "/info/currency invalid date query",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const responseJson = pm.response.json();",
+              "",
+              "pm.test(\"Status code is 400\", function () {",
+              "    pm.response.to.have.status(400)",
+              "});",
+              "",
+              "pm.test(\"Service named to be currency\", () => {",
+              "    pm.expect(responseJson.service).to.eql(\"currency\");",
+              "});",
+              "",
+              "pm.test(\"Error should be \\\"Invalid date query\\\"\", () => {",
+              "    pm.expect(responseJson.error).to.eql(\"Invalid date query\")",
+              "})"
+            ],
+            "type": "text/javascript",
+            "packages": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "127.0.0.1:{{PORT}}/info/currency?date=2026-03-1",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "{{PORT}}",
+          "path": [
+            "info",
+            "currency"
+          ],
+          "query": [
+            {
+              "key": "date",
+              "value": "2026-03-1"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "/info/currency",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const responseJson = pm.response.json();",
+              "",
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200)",
+              "});",
+              "",
+              "pm.test(\"Service named to be currency\", () => {",
+              "    pm.expect(responseJson.service).to.eql(\"currency\");",
+              "});",
+              "",
+              "pm.test(\"Data exists\", () => {",
+              "    pm.expect(responseJson).to.have.property(\"data\");",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "127.0.0.1:{{PORT}}/info/currency",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "{{PORT}}",
+          "path": [
+            "info",
+            "currency"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "PORT",
+      "value": "8000",
+      "type": "string"
+    }
+  ]
+}

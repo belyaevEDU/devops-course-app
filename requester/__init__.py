@@ -2,8 +2,9 @@ import requests
 from . import parser
 from .cached_session import get_daily
 
-BASE_URL = "http://www.cbr.ru/scripts/XML_daily.asp"
+BASE_URL = "https://www.cbr.ru/scripts/XML_daily.asp"
 RESPONSE_EXPECTED_ENCODING = "windows-1251"
+REQUEST_TIMEOUT = 60
 
 def get_bank_api_response(currency = "", date = "") -> dict[str, float]:
     """
@@ -21,13 +22,13 @@ def get_bank_api_response(currency = "", date = "") -> dict[str, float]:
 
         requestUrl += dateRearranged
 
-        response = requests.get(requestUrl)
+        response = requests.get(requestUrl, timeout=REQUEST_TIMEOUT)
+        response.raise_for_status()
     else:
         response = get_daily(requestUrl)
 
     response.encoding = RESPONSE_EXPECTED_ENCODING
-    if response.status_code != 200:
-        response.raise_for_status()
+
 
     if currency == "":
         return parser.get_all_currency_rates(response.text)
