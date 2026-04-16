@@ -2,7 +2,7 @@ FROM python:3.12.13-alpine3.23@sha256:7747d47f92cfca63a6e2b50275e23dba8407c30d8a
 
 WORKDIR /app
 
-RUN apk add --no-cache zlib~=1.3.2-r0 && apk add --no-cache openssl~=3.5.6-r0
+RUN apk add --no-cache zlib~=1.3.2-r0 && apk add --no-cache openssl~=3.5.6-r0 && apk add --no-cache musl-utils~=1.2.5-r23 && apk add --no-cache musl~=1.2.5-r23
 
 COPY requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
