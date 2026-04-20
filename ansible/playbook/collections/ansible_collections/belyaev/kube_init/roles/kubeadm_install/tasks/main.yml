@@ -1,0 +1,6 @@
+- name: Install kubeadm
+  ansible.builtin.apt:
+    name: kubeadm
+    state: present
+    update_cache: true
+  become: true

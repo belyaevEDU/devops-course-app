@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Include kubelet_install"
+      include_role:
+        name: "kubelet_install"

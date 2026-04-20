@@ -1,0 +1,6 @@
+- name: Install kubelet
+  ansible.builtin.apt:
+    name: kubelet
+    state: present
+    update_cache: true
+  become: true

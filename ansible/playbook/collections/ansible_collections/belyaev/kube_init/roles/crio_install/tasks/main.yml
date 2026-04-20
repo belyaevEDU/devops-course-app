@@ -1,0 +1,27 @@
+- name: Assert that CRIO_VERSION variable is >={{ CRIO_MINIMAL_VERSION }}
+  ansible.builtin.assert:
+    that:
+      - "CRIO_VERSION is version(CRIO_MINIMAL_VERSION, '>=')"
+    fail_msg: "CRI-O version specified to be {{ CRIO_VERSION }}. Should be at least {{ CRIO_MINIMAL_VERSION }}"
+
+- name: Add the cri-o apt repository
+  ansible.builtin.deb822_repository:
+    name: cri-o
+    types: [deb]
+    uris: "https://download.opensuse.org/repositories/isv:/cri-o:/stable:/{{ CRIO_VERSION }}/deb/"
+    suites: ["/"]
+    signed_by: "https://download.opensuse.org/repositories/isv:/cri-o:/stable:/{{ CRIO_VERSION }}/deb/Release.key"
+    state: present
+    enabled: true
+
+- name: Install the cri-o package
+  ansible.builtin.apt:
+    name:
+      - cri-o
+    state: present
+    update_cache: true
+
+- name: Start cri-o
+  ansible.builtin.systemd_service:
+    name: cri-o
+    state: started
