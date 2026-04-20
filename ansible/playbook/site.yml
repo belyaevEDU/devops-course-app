@@ -1,0 +1,13 @@
+---
+- name: Install cri-o
+  hosts: vms
+  become: true
+  roles:
+    - role: belyaev.kube_init.crio_install
+
+- name: Install kubelet & kubeadm
+  hosts: vms
+  become: true
+  roles:
+    - role: belyaev.kube_init.kubelet_install
+    - role: belyaev.kube_init.kubeadm_install
