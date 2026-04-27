@@ -69,6 +69,7 @@ pipeline {
                                 --sarif \
                                 --output ./reports/semgrep-report.sarif \
                                 --error \
+                                --disable-version-check \
                                 .
                         """
                     }
