@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frpc-config
+  namespace: ingress-nginx
+data:
+  frpc.toml: |
+    serverAddr = "193.233.211.116"
+    serverPort = 7000
+
+    auth.tokenSource.type = "file"
+    auth.tokenSource.file.path = "/etc/secret-volume/token"
+
+    [[proxies]]
+    name = "http"
+    type = "tcp"
+    localIP = "ingress-nginx-controller.ingress-nginx.svc.cluster.local"
+    localPort = 80
+    remotePort = 80
+
+    [[proxies]]
+    name = "https"
+    type = "tcp"
+    localIP = "ingress-nginx-controller.ingress-nginx.svc.cluster.local"
+    localPort = 443
+    remotePort = 443

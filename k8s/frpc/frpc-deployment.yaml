@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frpc
+  namespace: ingress-nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frpc
+  template:
+    metadata:
+      labels:
+        app: frpc
+    spec:
+      containers:
+        - name: frpc
+          image: snowdreamtech/frpc
+          volumeMounts:
+            - name: frpc-config
+              mountPath: /etc/frp/frpc.toml
+              subPath: frpc.toml
+            - name: secret-volume
+              readOnly: true
+              mountPath: "/etc/secret-volume"
+      volumes:
+        - name: frpc-config
+          configMap:
+            name: frpc-config
+        - name: secret-volume
+          secret:
+            secretName: frpc-token-dotfile
