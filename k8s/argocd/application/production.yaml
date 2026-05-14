@@ -1,0 +1,20 @@
+project: currency
+source:
+  repoURL: https://education-git.yadro.com/education/devops/2026/v.belyaev/currency-helm.git
+  path: currency/
+  targetRevision: HEAD
+  helm:
+    valueFiles:
+      - 00-values.yaml
+      - 01-values.production.yaml
+destination:
+  server: https://kubernetes.default.svc
+  namespace: currency-app-production
+syncPolicy:
+  automated:
+    prune: true
+    selfHeal: true
+    enabled: true
+  syncOptions:
+    - CreateNamespace=true
+    - ServerSideApply=true

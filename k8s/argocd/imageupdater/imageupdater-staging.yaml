@@ -1,0 +1,24 @@
+apiVersion: argocd-image-updater.argoproj.io/v1alpha1
+kind: ImageUpdater
+metadata:
+  name: currency-updater-staging
+  namespace: argocd
+spec:
+  applicationRefs:
+    - namePattern: "currency-staging"
+      images:
+        - alias: "restapi-currency"
+          imageName: "belyaevedu/restapi-currency:staging"
+          commonUpdateSettings:
+            pullSecret: "pullsecret:argocd/dockerhub-creds"
+            updateStrategy: "digest"
+          manifestTargets:
+            helm:
+              name: "image.repository"
+              tag: "image.tag"
+  writeBackConfig:
+    method: "git"
+    gitConfig:
+      repository: "https://education-git.yadro.com/education/devops/2026/v.belyaev/currency-helm.git"
+      branch: "main"
+      writeBackTarget: "helmvalues:01-values.staging.yaml"

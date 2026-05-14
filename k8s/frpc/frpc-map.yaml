@@ -5,7 +5,7 @@ metadata:
   namespace: ingress-nginx
 data:
   frpc.toml: |
-    serverAddr = "193.233.211.116"
+    serverAddr = "194.87.147.70"
     serverPort = 7000
 
     auth.tokenSource.type = "file"

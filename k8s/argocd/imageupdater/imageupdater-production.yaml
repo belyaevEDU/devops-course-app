@@ -1,0 +1,24 @@
+apiVersion: argocd-image-updater.argoproj.io/v1alpha1
+kind: ImageUpdater
+metadata:
+  name: currency-updater-production
+  namespace: argocd
+spec:
+  applicationRefs:
+    - namePattern: "currency-production"
+      images:
+        - alias: "restapi-currency"
+          imageName: "belyaevedu/restapi-currency:v1.x"
+          commonUpdateSettings:
+            pullSecret: "pullsecret:argocd/dockerhub-creds"
+            updateStrategy: "semver"
+          manifestTargets:
+            helm:
+              name: "image.repository"
+              tag: "image.tag"
+  writeBackConfig:
+    method: "git"
+    gitConfig:
+      repository: "https://education-git.yadro.com/education/devops/2026/v.belyaev/currency-helm.git"
+      branch: "main"
+      writeBackTarget: "helmvalues:00-values.yaml"

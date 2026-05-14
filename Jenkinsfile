@@ -27,6 +27,13 @@ pipeline {
                     env.PUBLISH_IMAGE_TAG = env.TAG_NAME ?: 'staging'
                     env.DEPLOY_ENV = env.TAG_NAME ? 'production' : 'staging'
                 }
+
+                echo 'logging into dockerhub'
+                script {
+                    withCredentials([string(credentialsId: 'dockerhub-pat', variable: 'PAT')]) {
+                        sh 'echo $PAT | docker login -u belyaevedu --password-stdin'
+                    }
+                }
             }
         }
         stage('Source code checks') {
@@ -154,29 +161,9 @@ pipeline {
                 }
             }
             steps {
-                echo 'logging into dockerhub'
-                script {
-                    withCredentials([string(credentialsId: 'dockerhub-pat', variable: 'PAT')]) {
-                        sh 'echo $PAT | docker login -u belyaevedu --password-stdin'
-                    }
-                    sh "docker tag ${DOCKER_IMAGE}:latest ${DOCKER_IMAGE}:${env.PUBLISH_IMAGE_TAG}"
-                    sh "docker push ${DOCKER_IMAGE}:${env.PUBLISH_IMAGE_TAG}"
-                }
-            }
-        }
-        stage('Deploy') {
-            when {
-                anyOf {
-                    branch DEPLOY_BRANCH
-                    tag DEPLOY_TAG
-                }
-            }
-            steps {
-                echo "calling deploy-specific pipeline with the tag ${env.PUBLISH_IMAGE_TAG} in ${env.DEPLOY_ENV}"
-                build job: 'parameterized-deployment', wait: true, parameters: [
-                    string(name: 'PUBLISH_IMAGE_TAG', value: env.PUBLISH_IMAGE_TAG),
-                    string(name: 'ENVIRONMENT', value: env.DEPLOY_ENV)
-                ]
+                echo "pushing image with tag ${env.PUBLISH_IMAGE_TAG}"
+                sh "docker tag ${DOCKER_IMAGE}:latest ${DOCKER_IMAGE}:${env.PUBLISH_IMAGE_TAG}"
+                sh "docker push ${DOCKER_IMAGE}:${env.PUBLISH_IMAGE_TAG}"
             }
         }
     }
