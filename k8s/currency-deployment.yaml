@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: currency-deployment
+  namespace: currency-app
   labels:
     app: currency
 spec:

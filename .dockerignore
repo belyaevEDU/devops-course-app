@@ -14,3 +14,9 @@ logs
 .gitignore
 
 ansible/
+k8s/
+testing/
+security/
+
+Jenkinsfile
+Jenkinsfile-deploy

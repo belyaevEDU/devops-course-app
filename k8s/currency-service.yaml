@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: currency-service
+  namespace: currency-app
 spec:
   selector:
     app: currency
