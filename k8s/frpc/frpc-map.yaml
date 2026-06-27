@@ -10,6 +10,7 @@ data:
 
     auth.tokenSource.type = "file"
     auth.tokenSource.file.path = "/etc/secret-volume/token"
+    loginFailExit = false
 
     [[proxies]]
     name = "http"
