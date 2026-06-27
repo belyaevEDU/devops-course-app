@@ -25,7 +25,6 @@ pipeline {
                 echo 'setting publish&deploy related variables'
                 script {
                     env.PUBLISH_IMAGE_TAG = env.TAG_NAME ?: 'staging'
-                    env.DEPLOY_ENV = env.TAG_NAME ? 'production' : 'staging'
                 }
 
                 echo 'logging into dockerhub'
