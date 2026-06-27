@@ -1,6 +1,8 @@
 # kubernetes docs
 v1.34.7
 
+⚠️ outdated and missing lots of info ⚠️
+
 hosts:
 
 ```
