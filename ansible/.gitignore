@@ -1,1 +1,3 @@
 ansible-venv
+.github/
+.devcontainer/
