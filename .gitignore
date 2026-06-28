@@ -9,3 +9,5 @@ logs
 *.sarif
 
 .DS_STORE
+
+.ansible
