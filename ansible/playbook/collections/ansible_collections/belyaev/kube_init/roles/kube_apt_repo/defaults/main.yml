@@ -1,1 +1,1 @@
-KUBERNETES_VERSION: v1.34
+kube_apt_repo_version: v1.34
