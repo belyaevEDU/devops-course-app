@@ -1,7 +1,7 @@
-project: default
+project: currency
 source:
-  repoURL: https://github.com/belyaevEDU/devops-app-helm
-  path: currency
+  repoURL: https://education-git.yadro.com/education/devops/2026/v.belyaev/currency-helm.git
+  path: currency/
   targetRevision: HEAD
   helm:
     valueFiles:
@@ -16,5 +16,5 @@ syncPolicy:
     selfHeal: true
     enabled: true
   syncOptions:
-    - ServerSideApply=true
     - CreateNamespace=true
+    - ServerSideApply=true
