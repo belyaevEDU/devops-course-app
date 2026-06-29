@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: frpc
-  namespace: ingress-nginx
+  namespace: ingress-controller
 spec:
   replicas: 1
   selector:
