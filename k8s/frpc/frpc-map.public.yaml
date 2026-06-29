@@ -2,26 +2,26 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: frpc-config
-  namespace: ingress-controller
+  namespace: ingress-nginx
 data:
   frpc.toml: |
     serverAddr = "123.123.123.123"
     serverPort = 7000
 
     auth.tokenSource.type = "file"
-    auth.tokenSource.file.path = "/etc/secret-volume/.secret_token"
+    auth.tokenSource.file.path = "/etc/secret-volume/token"
     loginFailExit = false
 
     [[proxies]]
     name = "http"
     type = "tcp"
-    localIP = "haproxy-ingress-kubernetes-ingress.ingress-controller.svc.cluster.local"
+    localIP = "ingress-nginx-controller.ingress-nginx.svc.cluster.local"
     localPort = 80
     remotePort = 80
 
     [[proxies]]
     name = "https"
     type = "tcp"
-    localIP = "haproxy-ingress-kubernetes-ingress.ingress-controller.svc.cluster.local"
+    localIP = "ingress-nginx-controller.ingress-nginx.svc.cluster.local"
     localPort = 443
     remotePort = 443
