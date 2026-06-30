@@ -55,7 +55,7 @@ pipeline {
                         echo 'linting python source code with ruff'
                         sh """
                             docker run ${DEFAULT_DOCKER_RUN_PARAMETERS} \
-                                ghcr.io/astral-sh/ruff:${RUFF_VERSION} check . \
+                                ghcr.io/astral-sh/ruff:${RUFF_VERSION} check ./app \
                                 --output-format=json \
                                 > ./reports/ruff-report.json
                         """
@@ -82,7 +82,7 @@ pipeline {
                                 --output ./reports/semgrep-report.sarif \
                                 --error \
                                 --disable-version-check \
-                                .
+                                ./app
                         """
                     }
                 }

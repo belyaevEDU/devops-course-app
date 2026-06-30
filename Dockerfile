@@ -5,7 +5,7 @@ WORKDIR /app
 COPY requirements.txt .
 RUN python -m pip install --no-cache-dir --upgrade pip==26.1.1 && pip3 install --no-cache-dir -r requirements.txt
 
-COPY . .
+COPY /app .
 
 ARG PORT=8000
 ENV PORT=${PORT}
