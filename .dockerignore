@@ -12,11 +12,11 @@ logs
 .DS_Store
 .dockerignore
 .gitignore
+.env.example
+docker-compose.yml
 
 ansible/
 k8s/
 testing/
-security/
 
 Jenkinsfile
-Jenkinsfile-deploy
