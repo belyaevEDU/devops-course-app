@@ -10,10 +10,8 @@ HTTP_STATUS_BAD_REQUEST = 400
 INVALID_CURRENCY_MESSAGE = "Invalid currency query"
 INVALID_DATE_MESSAGE = "Invalid date query"
 
-SERVER_LOG_PATH = "server/logs/errors.log"
-
 app = FastAPI()
-logger = logging_setup.make_logger(SERVER_LOG_PATH, __name__)
+logger = logging_setup.make_logger(__name__)
 
 @app.get("/info")
 def serve_info():
