@@ -5,7 +5,7 @@ metadata:
   namespace: argocd
 spec:
   applicationRefs:
-    - namePattern: "currency-staging"
+    - namePattern: "currency-app-staging"
       images:
         - alias: "restapi-currency"
           imageName: "belyaevedu/restapi-currency:staging"
@@ -19,6 +19,6 @@ spec:
   writeBackConfig:
     method: "git"
     gitConfig:
-      repository: "https://github.com/belyaevEDU/devops-app-helm.git"
+      repository: "https://github.com/belyaevEDU/devops-app-helm"
       branch: "main"
       writeBackTarget: "helmvalues:01-values.staging.yaml"

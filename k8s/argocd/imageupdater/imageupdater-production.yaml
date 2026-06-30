@@ -5,7 +5,7 @@ metadata:
   namespace: argocd
 spec:
   applicationRefs:
-    - namePattern: "currency-production"
+    - namePattern: "currency-app-prod"
       images:
         - alias: "restapi-currency"
           imageName: "belyaevedu/restapi-currency:v1.x"
