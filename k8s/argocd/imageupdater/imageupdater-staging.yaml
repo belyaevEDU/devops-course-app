@@ -19,6 +19,6 @@ spec:
   writeBackConfig:
     method: "git"
     gitConfig:
-      repository: "https://education-git.yadro.com/education/devops/2026/v.belyaev/currency-helm.git"
+      repository: "https://github.com/belyaevEDU/devops-app-helm.git"
       branch: "main"
       writeBackTarget: "helmvalues:01-values.staging.yaml"
