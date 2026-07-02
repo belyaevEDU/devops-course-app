@@ -12,7 +12,7 @@ ENV PORT=${PORT}
 
 EXPOSE ${PORT}
 
-RUN mkdir -p /app/server/logs && addgroup -g1000 app && adduser -u 1000 -G app -s /sbin/nologin -D app && chown -R app:app /app
+RUN addgroup -g1000 app && adduser -u 1000 -G app -s /sbin/nologin -D app && chown -R app:app /app
 USER app
 
 CMD ["python", "./main.py"]
