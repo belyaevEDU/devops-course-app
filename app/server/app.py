@@ -1,6 +1,9 @@
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
+from prometheus_fastapi_instrumentator import Instrumentator
+
 from os import getenv
+
 import requester
 from . import query_validation
 from . import logging_setup
@@ -11,6 +14,8 @@ INVALID_CURRENCY_MESSAGE = "Invalid currency query"
 INVALID_DATE_MESSAGE = "Invalid date query"
 
 app = FastAPI()
+Instrumentator().instrument(app).expose(app)
+
 logger = logging_setup.make_logger(__name__)
 
 @app.get("/info")
