@@ -12,6 +12,7 @@ spec:
     metadata:
       labels:
         app: frpc
+        currency-observability: "true"
     spec:
       containers:
         - name: frpc
