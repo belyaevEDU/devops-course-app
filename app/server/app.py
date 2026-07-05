@@ -1,5 +1,7 @@
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
+from contextlib import asynccontextmanager
+from prometheus_client import start_http_server
 from prometheus_fastapi_instrumentator import Instrumentator
 
 from os import getenv
@@ -13,8 +15,13 @@ HTTP_STATUS_BAD_REQUEST = 400
 INVALID_CURRENCY_MESSAGE = "Invalid currency query"
 INVALID_DATE_MESSAGE = "Invalid date query"
 
-app = FastAPI()
-Instrumentator().instrument(app).expose(app)
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    start_http_server(9100)
+    yield
+
+app = FastAPI(lifespan=lifespan)
+Instrumentator().instrument(app)
 
 logger = logging_setup.make_logger(__name__)
 
