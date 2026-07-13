@@ -1,20 +1,26 @@
-project: default
-source:
-  repoURL: https://github.com/belyaevEDU/devops-app-helm.git
-  path: currency
-  targetRevision: HEAD
-  helm:
-    valueFiles:
-      - 00-values.yaml
-      - 01-values.staging.yaml
-destination:
-  server: https://kubernetes.default.svc
-  namespace: currency-app-staging
-syncPolicy:
-  automated:
-    prune: true
-    selfHeal: true
-    enabled: true
-  syncOptions:
-    - ServerSideApply=true
-    - CreateNamespace=true
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: currency-staging
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/belyaevEDU/devops-app-helm.git
+    path: currency
+    targetRevision: HEAD
+    helm:
+      valueFiles:
+        - 00-values.yaml
+        - 01-values.staging.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: currency-app-staging
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      enabled: true
+    syncOptions:
+      - ServerSideApply=true
+      - CreateNamespace=true
