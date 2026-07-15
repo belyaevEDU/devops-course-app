@@ -6,7 +6,9 @@
 https://github.com/belyaevEDU/devops-app-helm - Helm для развертывания приложения + observability stack values
 
 https://github.com/belyaevEDU/repeating-functions-sharedlib - shared library для Jenkins пайплайна, содержит функцию для ожидания поднятия приложения.
+
 ## Общие сведения
+
 Проект заключался в:
 - написании [простого API на Python и FastAPI](/app/README.md)
 - развертывании Kubernetes кластера на трех виртуальных машинах с помощью Ansible
@@ -18,7 +20,7 @@ https://github.com/belyaevEDU/repeating-functions-sharedlib - shared library д�
 
 ## Построенный процесс и используемые технологии
 
-CI процесс выглядит следующим образом:
+### CI процесс
 
 ![](/docs/ci.png)
 
@@ -30,5 +32,17 @@ CI процесс выглядит следующим образом:
 - Build: [Docker](/Dockerfile)
 - Test: [Docker](/Dockerfile) с [hardened docker-compose файлом](/docker-compose.yml) + Newman [с тестами для Postman](/testing/postman_tests.json)
 - SCA: Trivy
-- Publish: Docker, образ отправляется на Dockerhub
+- Publish: Docker, образ отправляется на Docker Hub
+
+### CD процесс
+
+![](/docs/cd.png)
+
+В основе процесса continuous deployment взята методология GitOps.
+
+Приложение развернуто с помощью [ArgoCD](/k8s/argocd/application), [ArgoCD Image Updater](/k8s/argocd/imageupdater/) и Helm.
+
+На GitHub был создан отдельный [репозиторий](https://github.com/belyaevEDU/devops-app-helm), на котором лежит Helm chart для развертывания приложения в staging-окружении и production-окружении.
+
+CI, при триггере тэга или master, заканчивается шагом "Publish" *(не считая cleanup)*, который публикует новый образ в Docker Hub. Если Image Updater видит новую версию приложения, то он обновляет в Helm репозитории values файлы, меняя именно версию. ArgoCD же по webhook получает уведомления о изменениях в Helm репозитории и обновляет те приложения, которые получили изменения.
 
