@@ -68,4 +68,4 @@ Kube-prometheus-stack включает в себя Grafana и Prometheus.
 
 ![](/docs/traffic.png)
 
-К тому же, в диаграмме неймспейса currency в секции Observability можно заметить cert-issuer, который запрашивает TLS сертификат от LetsEncrypt.
+К тому же, в диаграмме неймспейса currency в секции Observability можно заметить cert-issuer, который запрашивает TLS сертификат от LetsEncrypt для возможности запросов с HTTPS.
