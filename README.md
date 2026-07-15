@@ -46,3 +46,17 @@ https://github.com/belyaevEDU/repeating-functions-sharedlib - shared library д�
 
 CI, при триггере тэга или master, заканчивается шагом "Publish" *(не считая cleanup)*, который публикует новый образ в Docker Hub. Если Image Updater видит новую версию приложения, то он обновляет в Helm репозитории values файлы, меняя именно версию. ArgoCD же по webhook получает уведомления о изменениях в Helm репозитории и обновляет те приложения, которые получили изменения.
 
+## Observability
+
+Эта часть - доработка после завершения курса с целью освоить этот ряд технологий.
+
+В Kubernetes кластере был развернут kube-prometheus-stack, Grafana Loki и Alloy.
+
+К тому же, приложение было инструментировано под Prometheus с помощью модуля [prometheus-fastapi-instrumentator](https://pypi.org/project/prometheus-fastapi-instrumentator/), который отдает метрики по ручке */metrics*. Для этого приложение запускает отдельный HTTP сервер на порте 9100, который не выводится Ingress.
+
+Kube-prometheus-stack включает в себя Grafana и Prometheus.
+
+![](/docs/logging.png)
+
+В helm чарте приложения появился ServiceMonitor, который собирает метрики от приложения по ручке */metrics* каждые 30 секунд. К тому же, был добавлен лейбл, по которому Alloy собирает логи приложения.
+
