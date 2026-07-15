@@ -45,7 +45,11 @@ https://github.com/belyaevEDU/repeating-functions-sharedlib - shared library д�
 
 На GitHub был создан отдельный [репозиторий](https://github.com/belyaevEDU/devops-app-helm), на котором лежит Helm chart для развертывания приложения в staging-окружении и production-окружении.
 
-CI, при триггере тэга или master, заканчивается шагом "Publish" *(не считая cleanup)*, который публикует новый образ в Docker Hub. Если Image Updater видит новую версию приложения, то он обновляет в Helm-specific репозитории values файлы, меняя именно версию. Далее, ArgoCD по webhook получает уведомление о изменениях в Helm-specific репозитории и обновляет те приложения, которые получили изменения.
+CI, при триггере тега или master, заканчивается шагом "Publish" *(не считая cleanup)*, который публикует новый образ в Docker Hub. Если Image Updater видит новую версию приложения, то он обновляет в Helm-specific репозитории values файлы, меняя именно версию. Далее, ArgoCD по webhook получает уведомление о изменениях в Helm-specific репозитории и обновляет те приложения, которые получили изменения.
+
+Правила Image Updater:
+- Для staging, CI публикует образ с неизменяемым тегом `staging`, как следствие для него используется стратегия digest, которая обновляет хэш
+- Для production, CI публикует образ с тегом, который был создан в гите, соответствующий [semantic versioning](https://semver.org/). Для него используется стратегия semver, которая обновляет версию согласно правилам semantic versioning.
 
 ## Observability
 
