@@ -1,69 +1,72 @@
-# Документация клиент-серверного приложения
-⚠️ документация в доработке. see [#17](https://github.com/belyaevEDU/devops-course-app/pull/17) ⚠️
-
+# Итоговый проект с курса DevOps от YADRO
 ⚠️ репозиторий был перенесен из GitLab, как следствие референсы на MRы в сообщениях коммитов будут вести на несвязанные с ними PRы в этом репозитории ⚠️
 
-REST API приложение на Python, которое вытягивает данные курса валют к рублю из ЦБ РФ и возвращает их по запросу GET.
-Сервер работает на порту 8000.
+⚠️ из-за ресурсных лимитаций во время собственных доработок, у меня не было полноценного dev окружения, поэтому история main ветки несколько грязная (как и история helm-specific репозитория...) ⚠️
 
-## Возможные запросы
-### GET `/info`
+## Репозитории, связанные с проектом
+https://github.com/belyaevEDU/devops-app-helm - Helm для развертывания приложения + observability stack values
 
-Примерный вывод, меняется лишь версия
-```
-{
-    "version": "1.0.0",
-    "service": "currency",
-    "author": "v.belyaev"
-}
-```
-### GET `/info/currency`
-Возможные query-параметры:
+https://github.com/belyaevEDU/repeating-functions-sharedlib - shared library для Jenkins пайплайна, содержит функцию для ожидания поднятия приложения.
 
-| Название | тип данных | optional? | пример     | описание |
-| -------- | ---------- | --------- | ------     | -------- |
-| currency | string     | да        | USD        | Валюта в стандарте ISO4217. Может быть в любом регистре. Если параметр не был передан, выводятся все валюты |
-| date     | string     | да        | 2023-01-01 | Формат YYYY-MM-DD (ISO 8601). Если параметр не был передан, выводятся данные за последний день |
+## Общие сведения
 
-Примерный вывод:
-```
-{
-    "service": "currency",
-    "data": {
-        "EUR": 91.9378
-    }
-}
-```
+Проект заключался в:
+- написании [простого API на Python и FastAPI](/app/README.md)
+- развертывании Kubernetes кластера на трех виртуальных машинах с помощью Ansible
+- построении CI/CD процесса, который бы проводил линтинг, сборку образа, тестировал и развертывал приложение на Kubernetes кластере
 
-Примерный вывод при query-параметрах, которые не соответствуют требованиям:
-```
-{
-    "service": "currency",
-    "data": {},
-    "error": "Invalid currency query"
-}
-```
-HTTP статус-код при плохих query-параметрах - 400 Bad Request.
+Далее проект был перенесен с их инфраструктуры и GitLab Yadro на GitHub и собственную инф-ру для доработки. Список доработок:
+- Перенос CNI и Ingress controller с Calico + ingress-nginx на Cilium ([#9](https://github.com/belyaevEDU/devops-course-app/issues/9))
+- Мониторинг с Grafana, Prometheus, Grafana Loki & Alloy. К тому же, приложение было инструментировано для Prometheus ([#12](https://github.com/belyaevEDU/devops-course-app/issues/12))
 
-Выводы при плохих query-параметрах:
-| ошибка | ошибка на выходе |
-| -------- | ---------- |
-| неверная валюта | Invalid currency query |
-| неверно введенная дата / дата в будущем | Invalid date query |
-| дата, на которую нет данных | Empty data (bad query parameters?) |
+## Построенный процесс и используемые технологии
 
-## Описание имплементации
-Программа разделена на следующие части:
-1) Модуль [**requester**](/requester/README.md) - отправляет запросы в API ЦБ РФ
-2) Модуль [**server**](/server/README.md) - слушает GET запросы и отвечает на них, вытягивая данные с **requester**
-3) **main** - просто запускает [**server**](/server/README.md)
+### CI процесс
 
-В каждой папке модуля есть свой README, который описывает имплементацию.
+![](/docs/ci.png)
 
-## Внешние модули
-- fastapi
-- uvicorn
-- requests
-- requests_cache
-- logging
-- iso4217
+При отправке изменений в репозиторий, хост репозитория отправляет сообщение вебхуку Jenkins. Запускается пайплайн, описанный в [Jenkinsfile](/Jenkinsfile) и схематично представленный на диаграмме. В диаграмме пайплайна, первый блок - триггер, далее сами шаги.
+
+В CI пайплайне были использованы следующие инструменты для своих согласных шагов:
+- Lint - линтинг исходного кода приложения на Python: Ruff
+- SAST - статическое тестирование безопасности с правилами, согласно используемым в приложении технологиям: Semgrep
+- Build: [Docker](/Dockerfile)
+- Test: [Docker](/Dockerfile) с [hardened docker-compose файлом](/docker-compose.yml) + Newman [с тестами для Postman](/testing/postman_tests.json)
+- SCA: Trivy
+- Publish: Docker, образ отправляется на Docker Hub
+
+### CD процесс
+
+![](/docs/cd.png)
+
+В основе процесса continuous deployment взята методология GitOps.
+
+Приложение развернуто с помощью [ArgoCD](/k8s/argocd/application), [ArgoCD Image Updater](/k8s/argocd/imageupdater/) и Helm.
+
+На GitHub был создан отдельный [репозиторий](https://github.com/belyaevEDU/devops-app-helm), на котором лежит Helm chart для развертывания приложения в staging-окружении и production-окружении.
+
+CI, при триггере тэга или master, заканчивается шагом "Publish" *(не считая cleanup)*, который публикует новый образ в Docker Hub. Если Image Updater видит новую версию приложения, то он обновляет в Helm-specific репозитории values файлы, меняя именно версию. Далее, ArgoCD по webhook получает уведомление о изменениях в Helm-specific репозитории и обновляет те приложения, которые получили изменения.
+
+## Observability
+
+Эта часть - доработка после завершения курса с целью освоить этот ряд технологий.
+
+В Kubernetes кластере был развернут kube-prometheus-stack, Grafana Loki и Alloy с помощью Helm и ArgoCD. Файлы с values лежат [в helm-specific репозитории](https://github.com/belyaevEDU/devops-app-helm/tree/main/observability/values), а манифесты argocd приложений в этом репозитории, [здесь](/k8s/argocd/observability/).
+
+К тому же, приложение было инструментировано под Prometheus с помощью модуля [prometheus-fastapi-instrumentator](https://pypi.org/project/prometheus-fastapi-instrumentator/), который отдает метрики по ручке */metrics*. Для этого приложение запускает отдельный HTTP сервер на порте 9100, который не выводится Ingress.
+
+Kube-prometheus-stack включает в себя Grafana и Prometheus.
+
+![](/docs/observability.png)
+
+В helm чарте приложения был добавлен ServiceMonitor, который собирает метрики от приложения по ручке */metrics* каждые 30 секунд. К тому же, был добавлен лейбл, по которому Alloy собирает логи приложения.
+
+## Получение запросов из открытой сети
+
+Нам выделенная инфраструктура от Yadro на время курса и моя локальная стоит за CGNAT. Как следствие, для получения запросов из открытой сети требуется reverse proxy. Для этого был использован проект [frp](https://github.com/fatedier/frp). Манифесты для деплоймента frp client находятся [здесь](/k8s/frpc/).
+
+Трафик идет следующим образом:
+
+![](/docs/traffic.png)
+
+К тому же, в диаграмме неймспейса currency в секции Observability можно заметить cert-issuer, который запрашивает TLS сертификат от LetsEncrypt для запросов с HTTPS.
