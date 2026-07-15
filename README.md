@@ -20,7 +20,7 @@ https://github.com/belyaevEDU/repeating-functions-sharedlib - shared library д�
 
 CI процесс выглядит следующим образом:
 
-![](/docs/ci_process.png)
+![](/docs/ci.png)
 
 При отправке изменений в репозиторий, хост репозитория отправляет сообщение вебхуку Jenkins. Запускается пайплайн, описанный в [Jenkinsfile](/Jenkinsfile) и схематично представленный на диаграмме. В диаграмме пайплайна, первый блок - триггер, далее сами шаги.
 
