@@ -17,7 +17,7 @@ INVALID_DATE_MESSAGE = "Invalid date query"
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    start_http_server(9100)
+    start_http_server(getenv("PROMETHEUS_PORT", default=9100))
     yield
 
 app = FastAPI(lifespan=lifespan)

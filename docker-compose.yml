@@ -8,12 +8,14 @@ services:
       context: .
       args:
         - PORT=${PORT-8000}
+        - PROMETHEUS_PORT=${PROMETHEUS_PORT-9100}
 
     env_file:
       - .env
 
     ports:
       - "${PORT-8000}:${PORT-8000}"
+      - "${PROMETHEUS_PORT-9100}:${PROMETHEUS_PORT-9100}"
 
     networks:
       - restapi-currency-network
@@ -24,8 +26,6 @@ services:
     tmpfs:
       - /app/requester/cache:uid=1000,gid=1000
       - /tmp:uid=1000,gid=1000
-    volumes:
-      - logs:/app/server/logs
 
     security_opt:
       - no-new-privileges:true
@@ -39,6 +39,3 @@ services:
 networks:
   restapi-currency-network:
     driver: bridge
-
-volumes:
-  logs:

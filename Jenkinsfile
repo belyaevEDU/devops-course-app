@@ -112,7 +112,7 @@ pipeline {
             steps {
                 echo 'starting a container with the image for testing'
                 sh "echo PORT=${TESTING_PORT} > .env"
-                sh 'docker compose up -d'
+                sh 'PROMETHEUS_PORT=8001 docker compose up -d'
 
                 healthCheckLoop("127.0.0.1:${TESTING_PORT}/info", 10, 3)
 
