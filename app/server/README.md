@@ -8,6 +8,8 @@
 ### Как работает модуль
 Функцией `server.run()` запускается сервер, описанный в `app.py`. Порт сервера берется из переменной окружения PORT (default=8000).
 
+К тому же, приложение инструментируется для Prometheus с помощью модуля [prometheus-fastapi-instrumentator](https://pypi.org/project/prometheus-fastapi-instrumentator/), который на отдельном HTTP сервере с портом 9100 отдает метрики на ручке `/metrics`.
+
 Логика запросов описана в [README приложения](/app/README.md).
 
 Данные о версии и авторе для запроса `GET /info` берутся из переменных окружения: VERSION (default=1.0.0), AUTHOR (default=v.belyaev).
